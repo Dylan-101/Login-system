@@ -1,0 +1,27 @@
+#messageboard .card-header form {
+    display: inline;
+  }
+.emoji-drawer {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    width: 100px;
+
+    margin-bottom: 32px;
+    transition: opacity 0.2s;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.emoji {
+    text-align: center;
+    font-size: 24px;
+    padding: 8px;
+}
+
+.emoji:hover {
+    cursor: pointer;
+}

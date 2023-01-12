@@ -4,6 +4,22 @@
 </head>
 <body>
 <?php
+include "classes.php";
+$user = User::load($_POST['username'], $_POST['password']);
+
+if (!$user) {
+    session_destroy();
+    session_unset();
+    session_start();
+    $_SESSION['passloginfail'] = true;
+    header('location: sign-in.php');
+} else {
+    session_start();
+    $_SESSION['loggedin'] = $user->id;
+    header('location: index.php');
+}
+
+/*
 include "library/db.php";
 $conn = connect();
 $query = "SELECT * FROM users WHERE username=?";
@@ -16,22 +32,22 @@ if ($user) {
     if (password_verify($_POST['password'], $user['password'])) {
         session_start();
         $_SESSION['loggedin'] = $user['ID'];
-        header('location: https://localhost/projects/login-system/index.php');
+        header('location: index.php');
     } else {
         session_destroy();
         session_unset();
         session_start();
         $_SESSION['passloginfail'] = true;
-        header('location: https://localhost/projects/login-system/sign-in.php');
+        header('location: sign-in.php');
     }
 } else {
     session_destroy();
     session_unset();
     session_start();
     $_SESSION['userloginfail'] = true;
-    header('location: https://localhost/projects/login-system/sign-in.php');
+    header('location: sign-in.php');
 }
-
+*/
 ?>
 </body>
 </html>
