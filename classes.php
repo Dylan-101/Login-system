@@ -29,9 +29,10 @@ class user {
     $u = false;
     if ($user) {
         if (password_verify($_POST['password'], $user['password'])) {
-            $u = new User($user["username"], $user["email"]);
+            $u = new User($user["username"], $user["email"], $user["admin"]);
             $u->id = $user["ID"];
-        }
+            $u->admin = $user["admin"];
+          }
     }
     return $u;
   }

@@ -54,7 +54,7 @@ if (isset($_SESSION['passloginfail'])) {
                 </div>
             </nav>
         </div>
-<h1 style="margin-top: 1%; margin-left: auto; margin-right: auto; width: 27%; display:block">Welcome back, please sign in!</h1>
+<h1 style="margin-top: 1%; margin-left: 40%; margin-right: auto; width: 27%; display:block">Welcome back, please sign in!</h1>
 
 <form action="sign-in-action.php" method="POST">
     <div class="mb-3">

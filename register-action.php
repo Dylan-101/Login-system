@@ -35,7 +35,7 @@ if ($_POST['password'] == $_POST['confirmpassword']) {
         }
         else {
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $query = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
+            $query = "INSERT INTO users (username, password, email, Admin) VALUES (?, ?, ?, 0)";
             $stmt = $conn->prepare($query);
             $stmt->bind_param("sss", $_POST['username'], $password, $_POST['email']);
             $stmt->execute();
