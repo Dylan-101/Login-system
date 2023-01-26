@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION['loggedin'] )) {
+  header('location: sign-in.php');
+}
 $_SESSION["adminedit"] = 0;
 if ($_SESSION['admin'] === 0) {
     header('location: admin-action.php');
@@ -38,7 +41,6 @@ if($_SESSION["adminedit"] === true){
                   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
-
                   <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
                       <li class="nav-item">
@@ -47,16 +49,11 @@ if($_SESSION["adminedit"] === true){
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="register.php">Sign up</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="logout-action.php">Logout</a>
-                      </li>
-                      <li class="nav-item">
                         <a class="nav-link" href="settings.php"?>Settings</a>
                       </li>
+                      <a class="nav-link active" href="Admin.php"?>Admin</a>
                       <li class="nav-item">
-                        <a class="nav-link active" href="admin-action.php"?>Admin</a>
+                        <a class="nav-link" href="logout-action.php">Logout</a>
                       </li>
                     </ul>
                     <form class="d-flex">
@@ -77,14 +74,23 @@ if($_SESSION["adminedit"] === true){
       <th scope="col">Username</th>
       <th scope="col">Email</th>
       <th scope="col">Admin</th>
+      <th scope="col">Banned</th>
       <th scope="col">Edit</th>
+      <th scope="col">Ban</th>
+      <th scope="col">Unban</th>
       <th scope="col">Hard Delete</th>
     </tr>
   </thead>
 <?php
+if ($_SESSION ["admin"] == 1){
+    $sql = "SELECT * FROM users where admin=0";
+    $result = $conn->query($sql);
+}
+if ($_SESSION ["admin"] == 2){
+    $sql = "SELECT * FROM users";
+    $result = $conn->query($sql);
+}
 
-$sql = "SELECT * FROM users where admin=0";
-$result = $conn->query($sql);
 ?>
 
 <?php while ($row = $result->fetch_array(MYSQLI_ASSOC)): ?>
@@ -93,8 +99,11 @@ $result = $conn->query($sql);
         <td><?= $row["username"] ?></td>
         <td><?= $row["email"] ?></td>
         <td><?= $row["admin"] ?></td>
-        <td><a href='admin-edit.php?id=<?= $row["ID"] ?>'>Edit</a></td>
-        <td><a href='admin-hard-delete.php?id=<?= $row["ID"] ?>'>Hard Delete</a></td>
+        <td><?= $row["deleted"] ?></td>
+        <td><form action="admin-edit.php" method="POST"><input type="submit" name="Edit" value="Edit"/><input type="hidden" name="ID" value=<?= $row["ID"] ?>></form>
+        <td><form action="admin-terminate-action.php" method="POST"><input type="submit" name="Edit" value="Ban"/><input type="hidden" name="ID" value=<?= $row["ID"] ?>></form>
+        <td><form action="admin-unterminate-action.php" method="POST"><input type="submit" name="Edit" value="Unban"/><input type="hidden" name="ID" value=<?= $row["ID"] ?>></form>
+        <td><form action="admin-hard-delete.php" method="POST"><input type="submit" name="Edit" value="Hard Delete"/><input type="hidden" name="ID" value=<?= $row["ID"] ?>></form>
     </tr>
 <?php endwhile; ?>
 

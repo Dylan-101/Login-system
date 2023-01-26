@@ -12,6 +12,13 @@ if (isset($_SESSION['passloginfail'])) {
     $passalert = "";
     $passinvalid = "form-control is-invalid";
 }
+if(isset($_SESSION["terminated"])) {
+   echo '<div class="alert alert-dismissible alert-danger">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <strong>Oh snap!</strong><span><p class="mb-0">Sorry your account has been terminated, please contact an admin</p></span>
+    </div>';
+    unset($_SESSION['terminated']);
+  }
 ?>
 <!DOCTYPE html>
 <html>

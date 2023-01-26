@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION['admin'] == 1) {
+if (($_SESSION["admin"] === 1) or ($_SESSION["admin"] === 2)) {
     $_SESSION['adminpass'] = true;
     header('location: admin.php');
 }

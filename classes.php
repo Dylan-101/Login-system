@@ -29,10 +29,12 @@ class user {
     $u = false;
     if ($user) {
         if (password_verify($_POST['password'], $user['password'])) {
-            $u = new User($user["username"], $user["email"], $user["admin"]);
+            $u = new User($user["username"], $user["email"], $user["admin"], $user["deleted"], $user["profileimage"]);
             $u->id = $user["ID"];
             $u->admin = $user["admin"];
-          }
+            $u->terminated = $user["deleted"];
+            $u->profileimage = $user["profileimage"];
+
     }
     return $u;
   }
@@ -44,5 +46,4 @@ class user {
     echo "Inserting user {$this->username} to the database";
   }
 }
-
-
+}

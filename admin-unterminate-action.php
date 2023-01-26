@@ -8,11 +8,12 @@ session_start();
 if ($_SESSION['admin'] === 0) {
     header('location: admin-action.php');
 }
+$terminate = 0;
 include "library/db.php";
 $conn = connect();
-$query = "UPDATE users SET username=?, email=?, admin=? WHERE ID=?";
+$query = "UPDATE users SET deleted=? WHERE ID=?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ssii", $_POST['username'], $_POST['email'], $_POST['admin'], $_POST['ID']);
+$stmt->bind_param("ii", $terminate, $_POST['ID']);
 $stmt->execute();
 $_SESSION['adminedit'] = true;
 header('location: admin.php')

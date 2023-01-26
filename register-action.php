@@ -34,10 +34,11 @@ if ($_POST['password'] == $_POST['confirmpassword']) {
             header('location: register.php');
         }
         else {
+            $profileimage = 'image-uploads/default.png';
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $query = "INSERT INTO users (username, password, email, Admin) VALUES (?, ?, ?, 0)";
+            $query = "INSERT INTO users (username, password, email, admin, profileimage) VALUES (?, ?, ?, 0, ?)";
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("sss", $_POST['username'], $password, $_POST['email']);
+            $stmt->bind_param("ssss", $_POST['username'], $password, $_POST['email'], $profileimage);
             $stmt->execute();
             header('location: sign-in.php?msg=Registered successfully'); }
         }

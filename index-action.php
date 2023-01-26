@@ -10,12 +10,13 @@ if (!isset($_SESSION['loggedin'] )) {
   }
 $currentuserID = $_SESSION['loggedin'];
 $messageinput = $_POST['messageinput'];
-$messageinput = str_replace("\n","<br>",$messageinput);
+$messageinputclean = filter_var($messageinput, FILTER_SANITIZE_STRING);
+$messageinputclean = str_replace("\n","<br>", $messageinputclean);
 include "library/db.php";
 $conn = connect();
 $query = "INSERT INTO messages (message, time , userID) VALUES (?,NOW(),?)";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("si", $messageinput, $currentuserID);
+$stmt->bind_param("si", $messageinputclean, $currentuserID);
 $stmt->execute();
 header('location: index.php');
 ?>

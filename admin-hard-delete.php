@@ -5,10 +5,9 @@ if ($_SESSION['admin'] === 0) {
 }
 include "library/db.php";
 $conn = connect();
-//and admin=0 is used to ensure an admin can't try and delete another admin using the URL
-$sql = "DELETE FROM users WHERE ID=? and admin=0";
+$sql = "DELETE FROM users WHERE ID=?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i",$_GET["id"]);
+$stmt->bind_param("i",$_POST["ID"]);
 $stmt->execute();
 header('location: admin.php');
 ?>

@@ -8,17 +8,23 @@ include "classes.php";
 $user = User::load($_POST['username'], $_POST['password']);
 
 if (!$user) {
-    session_destroy();
-    session_unset();
-    session_start();
-    $_SESSION['passloginfail'] = true;
     header('location: sign-in.php');
-} else {
+} 
+else {
+    if ($user->terminated === 0) {
     session_start();
     $_SESSION['loggedin'] = $user->id;
     $_SESSION['admin'] = $user->admin;
+    $_SESSION['terminated'] = $user->terminated;
+    $_SESSION['pfp'] = $user->profileimage;
     header('location: index.php');
     }
+    else {
+    session_start();
+    $_SESSION['terminated'] = 1;
+    header('location: sign-in.php');
+    }
+}
 
 
 ?>

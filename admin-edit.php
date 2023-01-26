@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION['loggedin'] )) {
+  header('location: sign-in.php');
+}
 if ($_SESSION['admin'] === 0) {
     header('location: admin-action.php');
 }
@@ -7,7 +10,7 @@ include "library/db.php";
 $conn = connect();
 $sql = "SELECT * FROM users WHERE id=?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $_GET['id']);
+$stmt->bind_param("i", $_POST['ID']);
 $row = $stmt->execute();
 $result = $stmt->get_result();
 $users = $result->fetch_assoc();
