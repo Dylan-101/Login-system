@@ -17,6 +17,7 @@ else {
     $_SESSION['admin'] = $user->admin;
     $_SESSION['terminated'] = $user->terminated;
     $_SESSION['pfp'] = $user->profileimage;
+    $_SESSION['isdark'] = $user->isdark;
     header('location: index.php');
     }
     else {

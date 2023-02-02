@@ -23,13 +23,19 @@ if($_SESSION["adminedit"] === true){
     </div>';
     $_SESSION["adminedit"] = 0;
 }
+$darkmodecss = "bootstrap-5.0.2-dist-lightmode/css/bootstrap.css";
+$darkmodejs ="bootstrap-5.0.2-dist-lightmode/js/bootstrap.js";
+if($_SESSION["isdark"] === 1) {
+  $darkmodecss = "bootstrap-5.0.2-dist-darkmode/css/bootstrap.css";
+  $darkmodejs ="bootstrap-5.0.2-dist-darkmode/js/bootstrap.js";
+}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Blue bird</title>
-    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.css">
-    <script src="bootstrap-5.0.2-dist/js/bootstrap.js"> </script>
+    <link rel="stylesheet" href="<?= $darkmodecss?>">
+    <script src="<?= $darkmodejs?>"> </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="index.css">
 </head>

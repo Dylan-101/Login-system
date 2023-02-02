@@ -34,8 +34,8 @@ if (isset($_SESSION['emailerror'])) {
   </style>
 <head>
     <title>Register</title>
-    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.css">
-    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/mainstyle.css">
+    <link rel="stylesheet" href="bootstrap-5.0.2-dist-lightmode/css/bootstrap.css">
+    <script src="bootstrap-5.0.2-dist-lightmode/js/bootstrap.js"> </script>
     <script src="bootstrap-5.0.2-dist/js/bootstrap.js"> </script>
 </heads>
 <body>

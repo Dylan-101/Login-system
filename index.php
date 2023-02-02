@@ -18,13 +18,21 @@
       <a class="nav-link" href="admin-action.php"?>Admin</a>
     </li>';
     }
+    $darkmodecss = "bootstrap-5.0.2-dist-lightmode/css/bootstrap.css";
+    $darkmodejs ="bootstrap-5.0.2-dist-lightmode/js/bootstrap.js";
+    $darkbutton = "";
+    if($_SESSION["isdark"] === 1) {
+      $darkmodecss = "bootstrap-5.0.2-dist-darkmode/css/bootstrap.css";
+      $darkmodejs ="bootstrap-5.0.2-dist-darkmode/js/bootstrap.js";
+      $darkbutton = " --bs-btn-bg: #000; --bs-btn-border-color: #000; --bs-btn-hover-bg: #858181;";
+    }
 ?>
 <!DOCTYPE html>
 <html> 
 <head>
     <title>Blue bird</title>
-    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.css">
-    <script src="bootstrap-5.0.2-dist/js/bootstrap.js"> </script>
+    <link rel="stylesheet" href="<?= $darkmodecss?>">
+    <script src="<?= $darkmodejs?>"> </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="index.css">
     <script src="index.js"> </script>
@@ -83,14 +91,17 @@ function toggleEmojiDrawer() {
 <div id="messageboard">
         <?php
             $conn = connect();
-            $select = "SELECT message,time,username,userID,messages.ID AS message_id FROM messages LEFT join users on messages.userID = users.ID ORDER BY time DESC";
+            $select = "SELECT message,time,username,profileimage,userID,messages.ID AS message_id FROM messages LEFT join users on messages.userID = users.ID ORDER BY time DESC";
             $q = mysqli_query($conn, $select);
               while ($row = mysqli_fetch_array($q)): {
                 if ($row['userID'] == $userID) {
                   $cardinfo = "card text-white bg-primary mb-3";
                   $cardstyle = "max-width: 25rem; margin-left: 51%;";
                   $messageid = $row['message_id'];
-                  $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="margin-left: 60%;">';
+                  $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="margin-left: 50%;">';
+                  if($_SESSION["isdark"] === 1) {
+                    $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="margin-left: 50%;' . $darkbutton . '>';
+                  }
                   $messagehiddenid = '<input type="hidden" name="message_id" value="'. $messageid.'"></form>';
                 }
                 else {
@@ -103,7 +114,11 @@ function toggleEmojiDrawer() {
               
             ?>
               <div class="<?php echo "$cardinfo"?>" style="<?php echo "$cardstyle"?>">
-                <div class="card-header" style="font-size:30px;"><?= $row['username'] ?><?= $delete ?> <?= $messagehiddenid ?></div>
+                <div class="card-header" style="font-size:30px;">
+                  <image id="profileImage" style="width: 50px; height: 50px;" src='<?= $row['profileimage']; ?>' />
+                  <?= $row['username'] ?>
+                  <?= $delete ?> <?= $messagehiddenid ?>
+                </div>
                 <div class="card-body">
                   <h4 class="card-title"><?= $row['message']; ?></h4>
                   <p class="card-text"><?= $row['time']; ?></p>
@@ -118,7 +133,7 @@ function toggleEmojiDrawer() {
         <form action="index-action.php" method="POST" id="userinputform">
           <div class="input-group">
             <textarea class="form-control" style="max-width: 50rem; margin-left: 33%; height: 10px" name="messageinput" rows="1" id="userinput"></textarea>
-            <span><input type="submit" value="Send" class="btn btn-secondary" class="form-control" style="margin-left: 2%; position: inline;"></span>
+            <span><input type="submit" value="Send" class="btn btn-secondary" class="form-control" style="margin-left: 2%; position: inline; <?=$darkbutton?>"></span>
             <span><div class="dropup" style="width: 80px; height:40px; margin-right:5px; margin-left: 0%;"></span>
             <button type="button" class="dropbtn" style="height:38px;">Emoji's</button>
               <div class="dropup-content">

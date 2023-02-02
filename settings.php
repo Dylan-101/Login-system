@@ -46,6 +46,14 @@ if (isset($_SESSION['settingscurrentpasserror'])) {
     $currentpassinvalid = "form-control is-invalid";
     unset($_SESSION['settingscurrentpasserror']);
 }
+$darkmodecss = "bootstrap-5.0.2-dist-lightmode/css/bootstrap.css";
+$darkmodejs ="bootstrap-5.0.2-dist-lightmode/js/bootstrap.js";
+$isdarkchecked = "";
+if($_SESSION["isdark"] === 1) {
+  $darkmodecss = "bootstrap-5.0.2-dist-darkmode/css/bootstrap.css";
+  $darkmodejs ="bootstrap-5.0.2-dist-darkmode/js/bootstrap.js";
+  $isdarkchecked = "checked";
+}
 $conn = connect();
 $sql = "SELECT * FROM users WHERE id=?";
 $stmt = $conn->prepare($sql);
@@ -58,8 +66,8 @@ $users = $result->fetch_assoc();
 <html>
 <head>
     <title>Blue bird</title>
-    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.css">
-    <script src="bootstrap-5.0.2-dist/js/bootstrap.js"> </script>
+    <link rel="stylesheet" href="<?= $darkmodecss?>">
+    <script src="<?= $darkmodejs?>"> </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="settings.css">
     <script src="settings.js"> </script>
@@ -99,9 +107,10 @@ $users = $result->fetch_assoc();
             </nav>
         </div>
 <h1 style="margin-top: 1%; margin-left: 45.2%; margin-right: auto; width: 25%; display:block">Settings</h1>
+<h2 style="margin-top: 1%; margin-left: 43%; margin-right: auto; width: 15%; display:block">Account Settings</h2>
 <form action="uploader-action.php" method="post" enctype="multipart/form-data">
 <div id="profile-container" style="margin-left: 45%; margin-top: 3% border-radius: 25px; border: 5px solid #2780e3">
-   <image id="profileImage" src="<?=$_SESSION['pfp']?>" />
+   <image id="profileImage" src="<?= $users['profileimage']; ?>" />
 </div>
   <div style="margin-left: 40%; margin-top: 1%;">
   Select image to upload: <input style="margin-left: 1%; width: 200px;" required type="file" name="fileToUpload" id="fileToUpload">
@@ -157,6 +166,15 @@ $users = $result->fetch_assoc();
 </div>
 </div>
 </div>
+<h2 style="margin-top: 1%; margin-left: 43%; margin-right: auto; width: 15%; display:block">Website Settings</h2>
+<form action="settings-update-action.php" style="margin-top: 1%; margin-left: 39%; margin-right: auto; width: 15%; display:block" method="POST">
+<div class="form-check">
+        <input class="form-check-input" style="margin: auto;" onchange="this.form.submit()" type="checkbox" name="darkmodecheck" id="darkmodecheck" <?=$isdarkchecked?>>
+        <label class="form-check-label" style="margin-left: 3%;" for="darkmodecheck">Darkmode</label>
+        <input type="hidden" name="ID" value="<?= $users["ID"] ?>">
+</div>
+</div>
+</form>
 </body>    
 <script>
   function toggleeditform() {

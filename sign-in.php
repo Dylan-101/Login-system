@@ -24,8 +24,8 @@ if(isset($_SESSION["terminated"])) {
 <html>
 <head>
     <title>Sign in</title>
-    <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.css">
-    <script src="bootstrap-5.0.2-dist/js/bootstrap.js"> </script>
+    <link rel="stylesheet" href="bootstrap-5.0.2-dist-lightmode/css/bootstrap.css">
+    <script src="bootstrap-5.0.2-dist-lightmode/js/bootstrap.js"> </script>
 </head>
 <body>
 <div class="bs-component">
