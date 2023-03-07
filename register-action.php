@@ -9,7 +9,7 @@ if ($_POST['password'] == $_POST['confirmpassword']) {
     $conn = connect();
     $query = "SELECT * FROM users WHERE username=?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $_POST['username']);
+    $stmt->bind_param("s", filter_var($_POST['username'], FILTER_SANITIZE_STRING));
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
@@ -25,7 +25,7 @@ if ($_POST['password'] == $_POST['confirmpassword']) {
         session_start();
         $query = "SELECT * FROM users WHERE email=?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("s", $_POST['email']);
+        $stmt->bind_param("s", filter_var($_POST['email'], FILTER_SANITIZE_STRING));
         $stmt->execute();
         $result = $stmt->get_result();
         $email = $result->fetch_assoc();
@@ -35,10 +35,11 @@ if ($_POST['password'] == $_POST['confirmpassword']) {
         }
         else {
             $profileimage = 'image-uploads/default.png';
-            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $passwordfilter = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+            $password = password_hash($passwordfilter, PASSWORD_DEFAULT);
             $query = "INSERT INTO users (username, password, email, admin, profileimage) VALUES (?, ?, ?, 0, ?)";
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("ssss", $_POST['username'], $password, $_POST['email'], $profileimage);
+            $stmt->bind_param("ssss", filter_var($_POST['username'], FILTER_SANITIZE_STRING), $password, filter_var($_POST['email'], FILTER_SANITIZE_STRING), $profileimage);
             $stmt->execute();
             header('location: sign-in.php?msg=Registered successfully'); }
         }

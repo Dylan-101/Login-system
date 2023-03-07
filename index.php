@@ -24,7 +24,13 @@
     if($_SESSION["isdark"] === 1) {
       $darkmodecss = "bootstrap-5.0.2-dist-darkmode/css/bootstrap.css";
       $darkmodejs ="bootstrap-5.0.2-dist-darkmode/js/bootstrap.js";
-      $darkbutton = " --bs-btn-bg: #000; --bs-btn-border-color: #000; --bs-btn-hover-bg: #858181;";
+      $darkbutton = '--bs-btn-bg: #000; --bs-btn-border-color: #000; --bs-btn-hover-bg: #858181;"';
+    }
+    $_SESSION["badword"] = false;
+    $invalidtext = "form-control";
+    if($_SESSION["badword"] === TRUE){
+      $invalidtext = "form-control is-invalid";
+      $_SESSION["badword"] = false;
     }
 ?>
 <!DOCTYPE html>
@@ -91,32 +97,48 @@ function toggleEmojiDrawer() {
 <div id="messageboard">
         <?php
             $conn = connect();
-            $select = "SELECT message,time,username,profileimage,userID,messages.ID AS message_id FROM messages LEFT join users on messages.userID = users.ID ORDER BY time DESC";
+            $select = "SELECT message,time,username,profileimage,deleted,deleteduser,userID,messages.ID AS message_id FROM messages LEFT join users on messages.userID = users.ID ORDER BY time DESC";
             $q = mysqli_query($conn, $select);
               while ($row = mysqli_fetch_array($q)): {
                 if ($row['userID'] == $userID) {
                   $cardinfo = "card text-white bg-primary mb-3";
                   $cardstyle = "max-width: 25rem; margin-left: 51%;";
                   $messageid = $row['message_id'];
-                  $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="margin-left: 50%;">';
+                  $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="float: right;">';
                   if($_SESSION["isdark"] === 1) {
-                    $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="margin-left: 50%;' . $darkbutton . '>';
+                    $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="float: right;' . $darkbutton . '>';
                   }
                   $messagehiddenid = '<input type="hidden" name="message_id" value="'. $messageid.'"></form>';
+                  $msgusername = $row['username'];
+                  $pfp = $row['profileimage'];
                 }
                 else {
                   $cardinfo = "card bg-light mb-3";
                   $cardstyle = "max-width: 25rem; margin-left: 38%;";
-                  $delete = "";
                   $messagehiddenid = "";
+                  $messageid = $row['message_id'];
+                  if ($row['deleted'] == 1) {
+                    $msgusername = $row['deleteduser'];
+                    $pfp = 'image-uploads/default.png';
+                  }
+                  else {
+                    $msgusername = $row['username'];
+                    $pfp = $row['profileimage'];
+                  }
+                  if ($_SESSION['admin'] === 1 or $_SESSION['admin'] === 2) {
+                    $delete = '<form action="delete-action.php" method="POST"><input type="submit" value="Delete" class="btn btn-secondary" class="form-control" style="float: right;' . $darkbutton . '>';
+                    $messagehiddenid = '<input type="hidden" name="message_id" value="'. $messageid.'"></form>';
+                  }
+                  else {
+                    $delete = "";
+                  }
                 }
-
               
             ?>
               <div class="<?php echo "$cardinfo"?>" style="<?php echo "$cardstyle"?>">
-                <div class="card-header" style="font-size:30px;">
-                  <image id="profileImage" style="width: 50px; height: 50px;" src='<?= $row['profileimage']; ?>' />
-                  <?= $row['username'] ?>
+                <div class="card-header" style="font-size:100vm;">
+                  <image id="profileImage" style="width: 50px; height: 50px; margin-right: 2%;" src='<?= $pfp; ?>' />
+                  <?= $msgusername ?>
                   <?= $delete ?> <?= $messagehiddenid ?>
                 </div>
                 <div class="card-body">
@@ -125,14 +147,13 @@ function toggleEmojiDrawer() {
                 </div>
             </div>
             <?php } endwhile; ?>
-
 </div>
   <div class="row fixed-bottom" style ="height: 40px; margin-bottom: 10px;">
     <div class="row">
       <div style="width: 100%;">
         <form action="index-action.php" method="POST" id="userinputform">
           <div class="input-group">
-            <textarea class="form-control" style="max-width: 50rem; margin-left: 33%; height: 10px" name="messageinput" rows="1" id="userinput"></textarea>
+            <textarea class="<?=$invalidtext?>" style="max-width: 50rem; margin-left: 33%; height: 10px" name="messageinput" rows="1" id="userinput"></textarea>
             <span><input type="submit" value="Send" class="btn btn-secondary" class="form-control" style="margin-left: 2%; position: inline; <?=$darkbutton?>"></span>
             <span><div class="dropup" style="width: 80px; height:40px; margin-right:5px; margin-left: 0%;"></span>
             <button type="button" class="dropbtn" style="height:38px;">Emoji's</button>

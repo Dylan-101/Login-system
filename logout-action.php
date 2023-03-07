@@ -1,6 +1,5 @@
 <?php
-   session_destroy($_SESSION["admin"]);
-   session_destroy($_SESSION["loggedin"]);
-   session_destroy($_SESSION["terminated"]);
+   session_start() ;
+   session_destroy() ;
    header('location: sign-in.php');
 ?>
